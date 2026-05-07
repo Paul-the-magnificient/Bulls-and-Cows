@@ -40,8 +40,7 @@ def main():
                 return True
         
         hidden_num = generate_number()
-        print(hidden_num) # this is only for testing purposes - delete before turning this in
-        
+               
         #This function counts bulls and cows
         def number_of_bull_cow(num, guess):
             bull_cow = [0,0]
