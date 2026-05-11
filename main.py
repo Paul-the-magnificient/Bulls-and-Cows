@@ -5,15 +5,15 @@ from timeit import default_timer
 LINE = "-" * 40
 
 
-"""Converts seconds into minutes, mm:ss format"""
 def format_time(total_seconds):
+    """Converts seconds into minutes, mm:ss format"""
     minutes = int(total_seconds // 60)
     seconds = int(total_seconds % 60)
     return f"{minutes:02}:{seconds:02}"
 
 
-"""Generates non-repeating 4 digits in a list"""
 def generate_number():
+    """Generates non-repeating 4 digits in a list"""
     number = random.sample(range(0, 9), 4)
     while number[0] == 0:
         number = random.sample(range(0, 9), 4)
@@ -22,21 +22,21 @@ def generate_number():
     return secret_num
 
 
-"""Breaks the input into a list and returns it"""
 def get_digit(num):
+    """Breaks the input into a list and returns it"""
     return list(str(num))
 
 
-"""Checking duplicity of a number"""
 def duplicity_check(number):
+    """Checking duplicity of a number"""
     number_list = get_digit(number)
     number_set = set(number_list)
     if len(number_list) == len(number_set):
         return True
 
      
-"""Counting bulls and cows"""
 def number_of_bull_cow(num, guess):
+    """Counting bulls and cows"""
     bull_cow = [0,0]
     guess_check = get_digit(guess)
     hidden_check = get_digit(num)
@@ -82,24 +82,24 @@ def main():
         
         while guessing:
             guess = input("Enter a number:")
-            if guess == "exit":
+            if guess.lower() == "exit":
                 print("Terminating the program")
                 guessing = False
                 gaming = False
             if len(str(guess)) != 4:
-                print("Guessing number has 4 digits, try again.")
+                print("Secret number has exactly 4 digits. Please input 4 digit number.")
                 print(LINE)
                 continue
             if not guess.isdigit():
-                print("Please input a valid 4 digit number.")
+                print("Letter(s) are not valid input. Please input 4 digit number.")
                 print(LINE)
                 continue
             if str(guess[0]) == "0":
-                print("Hidden number never begins with 0. Try again.")
+                print('Hidden number never begins with a "0" digit. Please input another 4 digit number.')
                 print(LINE)
                 continue
             if not duplicity_check(guess):
-                print("Hidden number does not contain any duplicates. Try again")
+                print("Hidden number does not contain any duplicate digits. Please input 4 digit number without any duplicate digits.")
                 print(LINE)
                 continue
                 
@@ -126,7 +126,7 @@ def main():
                     print(f"Game {game['Game']} : {game['Guesses']} guesses and time taken was {game['Time taken']}")
                 break
         
-        while guessing:
+        while gaming:
             question = input("Would you like to guess another number? (Y/n):")
             if question.lower() == "y":
                 break
