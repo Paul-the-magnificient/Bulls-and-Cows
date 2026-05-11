@@ -1,58 +1,76 @@
 import random
 from timeit import default_timer
 
+
 LINE = "-" * 40
 
+
+"""Converts seconds into minutes, mm:ss format"""
+def format_time(total_seconds):
+    minutes = int(total_seconds // 60)
+    seconds = int(total_seconds % 60)
+    return f"{minutes:02}:{seconds:02}"
+
+
+"""Generates non-repeating 4 digits in a list"""
+def generate_number():
+    number = random.sample(range(0, 9), 4)
+    while number[0] == 0:
+        number = random.sample(range(0, 9), 4)
+    str_number = map(str, number)
+    secret_num = "".join(str_number)
+    return secret_num
+
+
+"""Breaks the input into a list and returns it"""
+def get_digit(num):
+    return list(str(num))
+
+
+"""Checking duplicity of a number"""
+def duplicity_check(number):
+    number_list = get_digit(number)
+    number_set = set(number_list)
+    if len(number_list) == len(number_set):
+        return True
+
+     
+"""Counting bulls and cows"""
+def number_of_bull_cow(num, guess):
+    bull_cow = [0,0]
+    guess_check = get_digit(guess)
+    hidden_check = get_digit(num)
+    for i, j in zip(guess_check, hidden_check):
+        if i in hidden_check:
+            if i == j:
+                bull_cow[0] += 1
+            else:
+                bull_cow[1] += 1
+    return bull_cow
+
+
+def bull_or_bulls(incoming_guess):
+    if incoming_guess[0] == 1:
+        return "bull"
+    else:
+        return "bulls"
+
+
+def cow_or_cows(incoming_guess):
+    if incoming_guess[1] == 1:
+        return "cow"
+    else:
+        return "cows"
+
+    
 def main():
     game_counter = 0
-    Game_stats = []    
-    
-    GAMING = True
-    while GAMING:
+    gaming = True
+    hidden_num = generate_number()
+    game_stats = []
+        
+    while gaming:
         timer_start = default_timer()
-        
-        # function that converts seconds into minutes and convers it into mm:ss format
-        def format_time(total_seconds):
-            minutes = int(total_seconds // 60)
-            seconds = int(total_seconds % 60)
-            return f"{minutes:02}:{seconds:02}"
-        
-        # function below generates non-repeating 4 digits in a list
-        # then joins the number into a one 4 digit number (int)
-        def generate_number():
-            number = random.sample(range(0, 9), 4)
-            while number[0] == 0:
-                number = random.sample(range(0, 9), 4)
-            str_number = map(str, number)
-            secret_num = "".join(str_number)
-            return secret_num
-        
-        #This function breaks the input into a list and returns it
-        def get_digit(num):
-            return list(str(num))
-        
-        # This function checks duplicity of a number, returns True if there is NOT a duplicate
-        # It is used for the user input, the generate_number() function handles the generated number duplicity already
-        def duplicity_check(number):
-            number_list = get_digit(number)
-            number_set = set(number_list)
-            if len(number_list) == len(number_set):
-                return True
-        
-        hidden_num = generate_number()
-               
-        #This function counts bulls and cows
-        def number_of_bull_cow(num, guess):
-            bull_cow = [0,0]
-            guess_check = get_digit(guess)
-            hidden_check = get_digit(hidden_num)
-            for i, j in zip(guess_check, hidden_check):
-                if i in hidden_check:
-                    if i == j:
-                        bull_cow[0] += 1
-                    else:
-                        bull_cow[1] += 1
-            return bull_cow
         
         print("Hi there!")
         print(LINE)
@@ -62,12 +80,12 @@ def main():
         guessing = True
         num_guesses = 0
         
-        while guessing:    
+        while guessing:
             guess = input("Enter a number:")
             if guess == "exit":
                 print("Terminating the program")
                 guessing = False
-                GAMING = False
+                gaming = False
             if len(str(guess)) != 4:
                 print("Guessing number has 4 digits, try again.")
                 print(LINE)
@@ -86,9 +104,10 @@ def main():
                 continue
                 
             num_guesses += 1
-            bull_cow = number_of_bull_cow(hidden_num, guess)        
+            bull_cow = number_of_bull_cow(hidden_num, guess)
             
-            print(f"{bull_cow[0]} bulls, {bull_cow[1]} cows")
+            
+            print(f"{bull_cow[0]} {bull_or_bulls(bull_cow)}, {bull_cow[1]} {cow_or_cows(bull_cow)}")
             print(LINE)
             if bull_cow[0] == 4:
                 timer_end = default_timer()
@@ -101,24 +120,23 @@ def main():
                     "Guesses": num_guesses,
                     "Time taken": time
                 }
-                Game_stats.append(current_game)
+                game_stats.append(current_game)
                 print(f"Game history:")
-                for game in Game_stats:
+                for game in game_stats:
                     print(f"Game {game['Game']} : {game['Guesses']} guesses and time taken was {game['Time taken']}")
-                break        
+                break
         
         while guessing:
-            question = input("Would you like to play again? (Y/n):")
-            if question == "Y":
+            question = input("Would you like to guess another number? (Y/n):")
+            if question.lower() == "y":
                 break
-            if question == "n":
+            if question.lower() == "n":
                 print("Very well, see you next time!")
-                GAMING = False
+                gaming = False
                 break
             else:
                 print("Please input correct letter")
                 continue
     
 if __name__ == "__main__":
-    main()   
-    
+    main()
