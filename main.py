@@ -2,9 +2,6 @@ import random
 from timeit import default_timer
 
 
-LINE = "-" * 40
-
-
 def format_time(total_seconds):
     """Converts seconds into minutes, mm:ss format"""
     minutes = int(total_seconds // 60)
@@ -61,6 +58,9 @@ def cow_or_cows(incoming_guess):
         return "cow"
     else:
         return "cows"
+
+
+LINE = "-" * 40
 
     
 def main():
