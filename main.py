@@ -1,8 +1,10 @@
 import random
+
 from timeit import default_timer
 
+LINE = "-" * 40
 
-def format_time(total_seconds):
+def format_time(total_seconds: float) -> str:
     """Converts seconds into minutes, mm:ss format"""
     minutes = int(total_seconds // 60)
     seconds = int(total_seconds % 60)
@@ -10,7 +12,7 @@ def format_time(total_seconds):
 
 
 def generate_number():
-    """Generates non-repeating 4 digits in a list"""
+    """Generates non-repeating 4 digits"""
     number = random.sample(range(0, 9), 4)
     while number[0] == 0:
         number = random.sample(range(0, 9), 4)
@@ -19,12 +21,12 @@ def generate_number():
     return secret_num
 
 
-def get_digit(num):
+def get_digit(num: str) -> list[str]:
     """Breaks the input into a list and returns it"""
     return list(str(num))
 
 
-def duplicity_check(number):
+def duplicity_check(number: str) -> bool:
     """Checking duplicity of a number"""
     number_list = get_digit(number)
     number_set = set(number_list)
@@ -32,7 +34,7 @@ def duplicity_check(number):
         return True
 
      
-def number_of_bull_cow(num, guess):
+def number_of_bull_cow(num: str, guess: str) -> list[int, int]:
     """Counting bulls and cows"""
     bull_cow = [0,0]
     guess_check = get_digit(guess)
@@ -46,29 +48,26 @@ def number_of_bull_cow(num, guess):
     return bull_cow
 
 
-def bull_or_bulls(incoming_guess):
+def bull_or_bulls(incoming_guess: str) -> str:
     if incoming_guess[0] == 1:
         return "bull"
     else:
         return "bulls"
 
 
-def cow_or_cows(incoming_guess):
+def cow_or_cows(incoming_guess: str) -> str:
     if incoming_guess[1] == 1:
         return "cow"
     else:
         return "cows"
 
-
-LINE = "-" * 40
-
-    
+  
 def main():
     game_counter = 0
     gaming = True
     hidden_num = generate_number()
     game_stats = []
-        
+            
     while gaming:
         timer_start = default_timer()
         
@@ -86,12 +85,13 @@ def main():
                 print("Terminating the program")
                 guessing = False
                 gaming = False
+                break
             if len(str(guess)) != 4:
                 print("Secret number has exactly 4 digits. Please input 4 digit number.")
                 print(LINE)
                 continue
             if not guess.isdigit():
-                print("Letter(s) are not valid input. Please input 4 digit number.")
+                print("Only 4 digit number is a valid input. Please input 4 digit number.")
                 print(LINE)
                 continue
             if str(guess[0]) == "0":
@@ -105,7 +105,7 @@ def main():
                 
             num_guesses += 1
             bull_cow = number_of_bull_cow(hidden_num, guess)
-            
+                        
             
             print(f"{bull_cow[0]} {bull_or_bulls(bull_cow)}, {bull_cow[1]} {cow_or_cows(bull_cow)}")
             print(LINE)
@@ -128,6 +128,9 @@ def main():
         
         while gaming:
             question = input("Would you like to guess another number? (Y/n):")
+            if question.lower() == "exit":
+                gaming = False
+                break
             if question.lower() == "y":
                 break
             if question.lower() == "n":
