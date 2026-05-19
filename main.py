@@ -61,7 +61,7 @@ def cow_or_cows(incoming_guess: str) -> str:
     else:
         return "cows"
 
-  
+
 def main():
     game_counter = 0
     gaming = True
@@ -104,8 +104,7 @@ def main():
                 continue
                 
             num_guesses += 1
-            bull_cow = number_of_bull_cow(hidden_num, guess)
-                        
+            bull_cow = number_of_bull_cow(hidden_num, guess)                        
             
             print(f"{bull_cow[0]} {bull_or_bulls(bull_cow)}, {bull_cow[1]} {cow_or_cows(bull_cow)}")
             print(LINE)
@@ -126,12 +125,15 @@ def main():
                     print(f"Game {game['Game']} : {game['Guesses']} guesses and time taken was {game['Time taken']}")
                 break
         
-        while gaming:
+        while True:
+            if not gaming:
+                break
             question = input("Would you like to guess another number? (Y/n):")
             if question.lower() == "exit":
                 gaming = False
                 break
             if question.lower() == "y":
+                hidden_num = generate_number()
                 break
             if question.lower() == "n":
                 print("Very well, see you next time!")
